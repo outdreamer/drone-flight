@@ -6,22 +6,39 @@
     var scene = viewer.scene;
     var clock = viewer.clock;
 
-    console.log(viewer.camera);
+    function getCoordinates(x, y, z){
+
+        //Create a Cartesian and determine it's Cartographic representation on a WGS84 ellipsoid.
+        var position = new Cesium.Cartesian3(x,y,z);
+        var cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
+        var pi = 3.14159265359;
+        var latitude = cartographicPosition.latitude * (180/pi);
+        var longitude = cartographicPosition.longitude * (180/pi);
+        console.log('https://www.google.com/maps/@' + latitude + ',' + longitude + ',8z');
+
+    }
 
     viewer.camera.moveStart.addEventListener(function() {
+            
         viewChanged.style.display = 'block';
-        console.log('start ' + viewer.camera.position);
-        window.interval = setInterval(function() {
-            console.log(viewer.camera.position);
+        console.log('Start');
+        getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
+        window.intervalTimer = setInterval(function() {
+            console.log('moving');
+            getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
         }, 1000);
-    });
-    viewer.camera.moveEnd.addEventListener(function() {
-        viewChanged.style.display = 'none';
-        console.log('end ' + viewer.camera.position);
 
-        if(window.interval){
-            clearInterval(interval);
+    });
+
+    viewer.camera.moveEnd.addEventListener(function() {
+
+        viewChanged.style.display = 'none';
+        if(window.intervalTimer){
+            clearInterval(intervalTimer);
         }
+        console.log('End');
+        getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
+
     });
 
     $('.cesium-geocoder-searchButton').on('click', function(){
