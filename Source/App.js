@@ -11,12 +11,18 @@
     viewer.camera.moveStart.addEventListener(function() {
         viewChanged.style.display = 'block';
         console.log('start ' + viewer.camera.position);
+        window.interval = setInterval(function() {
+            console.log(viewer.camera.position);
+        }, 1000);
     });
     viewer.camera.moveEnd.addEventListener(function() {
         viewChanged.style.display = 'none';
         console.log('end ' + viewer.camera.position);
-    });
 
+        if(window.interval){
+            clearInterval(interval);
+        }
+    });
 
     $('.cesium-geocoder-searchButton').on('click', function(){
         //var input_val = $('#cesiumContainer .cesium-viewer-geocoderContainer').find('input[type="Search"]').val();
