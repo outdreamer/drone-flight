@@ -9,6 +9,8 @@ var clock = viewer.clock;
 
 function setCity() {
 
+    $('#drone-gif').show();
+
     var address = prompt("Please enter your address in the following format, or zip code","100 My Street, My City, DC");
 
     if (address != null) {
@@ -22,9 +24,9 @@ function setCity() {
             var longitude = data.results[0].geometry.location.lng;
             var latitude = data.results[0].geometry.location.lat;
 
-            //console.log(longitude + ' is long and ' + latitude + ' is latitude');
-
-            window.Sandcastle.declare(setCity);
+            if (!window.Sandcastle.setCity) {
+                window.Sandcastle.declare(setCity);
+            }
 
             viewer.camera.flyTo({
                 destination : Cesium.Cartesian3.fromDegrees(longitude, latitude, 15000.0)
@@ -38,6 +40,8 @@ function setCity() {
 
 function setCoordinates() {
 
+    $('#drone-gif').show();
+    
     var longitude = prompt("Please enter your longitude", "");
 
     if (longitude != null) {
