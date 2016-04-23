@@ -6,6 +6,32 @@ var viewer = new Cesium.Viewer('cesiumContainer');
 var scene = viewer.scene;
 var clock = viewer.clock;
 
+
+function setCity() {
+
+    var address = prompt("Please enter your address in the following format, or zip code","100 My Street, My City, DC");
+
+    if (address != null) {
+
+        address = address.replace(' ', '+');
+
+        var gmaps_url = "http://maps.google.com/maps/api/geocode/json?address=" + address + "&sensor=false";
+
+        $.get(gmaps_url, function(data){
+            
+            var longitude = data.results[0].geometry.location.lng;
+            var latitude = data.results[0].geometry.location.lat;
+            window.Sandcastle.declare(setCoordinates);
+            viewer.camera.flyTo({
+                destination : Cesium.Cartesian3.fromDegrees(longitude, latitude, 15000.0)
+            });
+
+        });
+
+    }
+
+}
+
 function setCoordinates() {
 
     var longitude = prompt("Please enter your longitude", "");
@@ -206,6 +232,12 @@ function flyInACity() {
 window.Sandcastle.addToolbarMenu([{
     text : 'Camera Options'
 }, {
+    text : 'Set City',
+    onselect : function() {
+        setCity();
+        window.Sandcastle.highlight(setCity);
+    }
+}, {
     text : 'Set Coordinates',
     onselect : function() {
         setCoordinates();
@@ -277,8 +309,11 @@ $('select.sandcastle-button').change(function(){
 
     var selected = $(this).find('option:selected').text();
 
-    switch (selected) { 
-
+    switch (selected) {
+        case 'Set City' :
+            setCity();
+            window.Sandcastle.highlight(setCity);
+            break;
         case 'Set Coordinates' : 
             setCoordinates();
             window.Sandcastle.highlight(setCoordinates);
