@@ -7,6 +7,7 @@
     <meta name="description" content="Fly to a specified location or view a geographic rectangle.">
     <meta name="cesium-sandcastle-labels" content="Showcases">
     <title>Cesium Demo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script type="text/javascript" src="/Source/require.js"></script>
     <script type="text/javascript">
     require.config({
@@ -22,13 +23,16 @@
         @import url(../templates/bucket.css);
         #toolbar {
           position: relative;
-          top: -680px;
+          top: -630px;
           left: 250px;
         }
         #viewChanged {
             display: none;
             background-color: red;
             color: white;
+        }
+        #drone-land {
+          display: none;
         }
     </style>
 
@@ -37,6 +41,7 @@
   <div id="cesiumContainer" class="fullSize"></div>
   <div id="loadingOverlay"><h1>Loading...</h1></div>
   <div id="toolbar"><div id="viewChanged">View Changed</div></div>
+  <div id="drone-land"><img src="Source/droneland.gif"></div>
   <footer>
     <script type="text/javascript" src="/Source/Sandcastle-header.js"></script>
     <script src="ThirdParty/Cesium/Cesium.js"></script>

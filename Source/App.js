@@ -9,7 +9,7 @@ var clock = viewer.clock;
 
 function setCity() {
 
-    $('#drone-gif').show();
+    $('#drone-land').show();
 
     var address = prompt("Please enter your address in the following format, or zip code","100 My Street, My City, DC");
 
@@ -40,7 +40,7 @@ function setCity() {
 
 function setCoordinates() {
 
-    $('#drone-gif').show();
+    $('#drone-land').show();
     
     var longitude = prompt("Please enter your longitude", "");
 
