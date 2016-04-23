@@ -6,11 +6,13 @@ var viewer = new Cesium.Viewer('cesiumContainer');
 var scene = viewer.scene;
 var clock = viewer.clock;
 
+console.log(viewer);
+
 function flyToPentagon() {
 
     window.Sandcastle.declare(flyToPentagon);
     viewer.camera.flyTo({
-        destination : Cesium.Cartesian3.fromDegrees(-117.16, 32.71, 15000.0)
+        destination : Cesium.Cartesian3.fromDegrees(-77.0562669, 38.8718568, 15000.0)
     });
 }
 
