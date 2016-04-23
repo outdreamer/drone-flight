@@ -6,7 +6,26 @@ var viewer = new Cesium.Viewer('cesiumContainer');
 var scene = viewer.scene;
 var clock = viewer.clock;
 
-console.log(viewer);
+function setCoordinates() {
+
+    var longitude = prompt("Please enter your longitude", "");
+
+    if (longitude != null) {
+
+        var latitude = prompt("Please enter your latitude", "");
+
+        if (latitude != null) {
+
+            window.Sandcastle.declare(setCoordinates);
+            viewer.camera.flyTo({
+                destination : Cesium.Cartesian3.fromDegrees(longitude, latitude, 15000.0)
+            });
+
+        }
+
+    }
+
+}
 
 function flyToPentagon() {
 
@@ -187,6 +206,12 @@ function flyInACity() {
 window.Sandcastle.addToolbarMenu([{
     text : 'Camera Options'
 }, {
+    text : 'Set Coordinates',
+    onselect : function() {
+        setCoordinates();
+        window.Sandcastle.highlight(setCoordinates);
+    }
+}, {
     text : 'Fly in a city',
     onselect : function() {
         flyInACity();
@@ -252,7 +277,12 @@ $('select.sandcastle-button').change(function(){
 
     var selected = $(this).find('option:selected').text();
 
-    switch (selected){ 
+    switch (selected) { 
+
+        case 'Set Coordinates' : 
+            setCoordinates();
+            window.Sandcastle.highlight(setCoordinates);
+            break;
         case 'Fly in a city' : 
             flyInACity();
             window.Sandcastle.highlight(flyInACity);
