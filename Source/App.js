@@ -6,7 +6,6 @@ var viewer = new Cesium.Viewer('cesiumContainer');
 var scene = viewer.scene;
 var clock = viewer.clock;
 
-
 function setCity() {
 
     $('#drone-land').show();
@@ -29,7 +28,7 @@ function setCity() {
             }
 
             viewer.camera.flyTo({
-                destination : Cesium.Cartesian3.fromDegrees(longitude, latitude, 15000.0)
+                destination : Cesium.Cartesian3.fromDegrees(longitude, latitude, 5000.0)
             });
 
         });
@@ -52,7 +51,7 @@ function setCoordinates() {
 
             window.Sandcastle.declare(setCoordinates);
             viewer.camera.flyTo({
-                destination : Cesium.Cartesian3.fromDegrees(longitude, latitude, 15000.0)
+                destination : Cesium.Cartesian3.fromDegrees(longitude, latitude, 5000.0)
             });
 
         }
@@ -65,7 +64,7 @@ function flyToPentagon() {
 
     window.Sandcastle.declare(flyToPentagon);
     viewer.camera.flyTo({
-        destination : Cesium.Cartesian3.fromDegrees(-77.0562669, 38.8718568, 15000.0)
+        destination : Cesium.Cartesian3.fromDegrees(-77.0562669, 38.8718568, 5000.0)
     });
 }
 
