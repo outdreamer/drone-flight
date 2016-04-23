@@ -22,9 +22,9 @@
         }
         @import url(../templates/bucket.css);
         #toolbar {
-          position: relative;
+          /*position: relative;
           top: -630px;
-          left: 250px;
+          left: 250px;*/
         }
         #viewChanged {
           display: none;
@@ -32,18 +32,32 @@
           color: white;
         }
         #drone-land {
-          display: none;
           position: relative;
           top: -300px;
           margin-left: auto;
           margin-right: auto;
           height: 150px;
           width: 150px;
+          opacity: 0;
+          font-size: 21px;
+          margin-top: 25px;
+          text-align: center;
+          -webkit-transition: opacity 2s ease-in;
+            -moz-transition: opacity 2s ease-in;
+              -ms-transition: opacity 2s ease-in;
+                -o-transition: opacity 2s ease-in;
+                  transition: opacity 2s ease-in;
+        }
+
+        #drone-land.load {
+            opacity: 1;
         }
     </style>
 
 </head>
 <body>
+  <div id="notifications" class="notify">
+  </div>
   <div id="cesiumContainer" class="fullSize"></div>
   <div id="loadingOverlay"><h1>Loading...</h1></div>
   <div id="toolbar"><div id="viewChanged">View Changed</div></div>
