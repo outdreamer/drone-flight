@@ -6,9 +6,21 @@ var viewer = new Cesium.Viewer('cesiumContainer');
 var scene = viewer.scene;
 var clock = viewer.clock;
 
+$('#cesiumContainer .cesium-viewer-geocoderContainer').find('input[type="Search"]').on('keydown', function(e){
+
+    var keycode = e.keyCode;
+
+    if (keycode == 13) {
+
+        $('#drone-land').addClass('load');
+
+    }
+
+});
+
 function setCity() {
 
-    $('#drone-land').show();
+    $('#drone-land').addClass('load');
 
     var address = prompt("Please enter your address in the following format, or zip code","100 My Street, My City, DC");
 
