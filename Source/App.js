@@ -1,19 +1,21 @@
-(function() {
+(function($) {
+
+$(document).on('ready', function(){
+
 var viewer = new Cesium.Viewer('cesiumContainer');
 var scene = viewer.scene;
 var clock = viewer.clock;
 
+function flyToPentagon() {
 
-function flyToSanDiego() {
-    alert('flying');
-    Sandcastle.declare(flyToSanDiego);
+    window.Sandcastle.declare(flyToPentagon);
     viewer.camera.flyTo({
         destination : Cesium.Cartesian3.fromDegrees(-117.16, 32.71, 15000.0)
     });
 }
 
 function flyToHeadingPitchRoll() {
-    Sandcastle.declare(flyToHeadingPitchRoll);
+    window.Sandcastle.declare(flyToHeadingPitchRoll);
     viewer.camera.flyTo({
         destination : Cesium.Cartesian3.fromDegrees(-122.22, 46.12, 5000.0),
         orientation : {
@@ -25,7 +27,7 @@ function flyToHeadingPitchRoll() {
 }
 
 function flyToLocation() {
-    Sandcastle.declare(flyToLocation);
+    window.Sandcastle.declare(flyToLocation);
 
     // Create callback for browser's geolocation
     function fly(position) {
@@ -39,7 +41,7 @@ function flyToLocation() {
 }
 
 function viewRectangle() {
-    Sandcastle.declare(viewRectangle);
+    window.Sandcastle.declare(viewRectangle);
 
     var west = -77.0;
     var south = 38.0;
@@ -63,7 +65,7 @@ function viewRectangle() {
 }
 
 function flyToRectangle() {
-    Sandcastle.declare(flyToRectangle);
+    window.Sandcastle.declare(flyToRectangle);
 
     var west = -90.0;
     var south = 38.0;
@@ -87,7 +89,7 @@ function flyToRectangle() {
 }
 
 function setReferenceFrame() {
-    Sandcastle.declare(setReferenceFrame);
+    window.Sandcastle.declare(setReferenceFrame);
 
     var center = Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883);
     var transform = Cesium.Transforms.eastNorthUpToFixedFrame(center);
@@ -105,7 +107,7 @@ function setReferenceFrame() {
 }
 
 function setHeadingPitchRoll() {
-    Sandcastle.declare(setHeadingPitchRoll);
+    window.Sandcastle.declare(setHeadingPitchRoll);
     
     var camera = viewer.camera;
     camera.setView({
@@ -133,7 +135,7 @@ function icrf(scene, time) {
 }
 
 function viewInICRF() {
-    Sandcastle.declare(viewInICRF);
+    window.Sandcastle.declare(viewInICRF);
 
     viewer.camera.flyHome(0);
     
@@ -148,7 +150,7 @@ var removeStart;
 var removeEnd;
 
 function cameraEvents() {
-    Sandcastle.declare(cameraEvents);
+    window.Sandcastle.declare(cameraEvents);
     
     var camera = viewer.camera;
     removeStart = camera.moveStart.addEventListener(function() {
@@ -160,7 +162,7 @@ function cameraEvents() {
 }
 
 function flyInACity() {
-    Sandcastle.declare(flyInACity);
+    window.Sandcastle.declare(flyInACity);
     
     var camera = scene.camera;
     camera.flyTo({
@@ -180,71 +182,122 @@ function flyInACity() {
     });
 }
 
-Sandcastle.addToolbarMenu([{
+window.Sandcastle.addToolbarMenu([{
     text : 'Camera Options'
 }, {
     text : 'Fly in a city',
     onselect : function() {
         flyInACity();
-        Sandcastle.highlight(flyInACity);
+        window.Sandcastle.highlight(flyInACity);
     }
 }, {
-    text : 'Fly to San Diego',
+    text : 'Fly to Pentagon',
     onselect : function() {
-        flyToSanDiego();
-        Sandcastle.highlight(flyToSanDiego);
+        flyToPentagon();
+        window.Sandcastle.highlight(flyToSanDiego);
     }
 }, {
     text : 'Fly to Location with heading, pitch and roll',
     onselect : function() {
         flyToHeadingPitchRoll();
-        Sandcastle.highlight(flyToHeadingPitchRoll);
+        window.Sandcastle.highlight(flyToHeadingPitchRoll);
     }
 }, {
     text : 'Fly to My Location',
     onselect : function() {
         flyToLocation();
-        Sandcastle.highlight(flyToLocation);
+        window.Sandcastle.highlight(flyToLocation);
     }
 }, {
     text : 'Fly to Rectangle',
     onselect : function() {
         flyToRectangle();
-        Sandcastle.highlight(flyToRectangle);
+        window.Sandcastle.highlight(flyToRectangle);
     }
 }, {
     text : 'View a Rectangle',
     onselect : function() {
         viewRectangle();
-        Sandcastle.highlight(viewRectangle);
+        window.Sandcastle.highlight(viewRectangle);
     }
 }, {
     text : 'Set camera reference frame',
     onselect : function() {
         setReferenceFrame();
-        Sandcastle.highlight(setReferenceFrame);
+        window.Sandcastle.highlight(setReferenceFrame);
     }
 }, {
     text : 'Set camera with heading, pitch, and roll',
     onselect : function() {
         setHeadingPitchRoll();
-        Sandcastle.highlight(setHeadingPitchRoll);
+        window.Sandcastle.highlight(setHeadingPitchRoll);
     }
 },{
     text : 'View in ICRF',
     onselect : function() {
         viewInICRF();
-        Sandcastle.highlight(viewInICRF);
+        window.Sandcastle.highlight(viewInICRF);
     }
 }, {
     text : 'Move events',
     onselect : function() {
         cameraEvents();
-        Sandcastle.highlight(cameraEvents);
+        window.Sandcastle.highlight(cameraEvents);
     }
 }]);
 
-Sandcastle.reset = function() {
+$('select.sandcastle-button').change(function(){
+
+    var selected = $(this).find('option:selected').text();
+
+    switch (selected){ 
+        case 'Fly in a city' : 
+            flyInACity();
+            window.Sandcastle.highlight(flyInACity);
+            break;
+        case 'Fly to Pentagon' :
+            flyToPentagon();
+            window.Sandcastle.highlight(flyToPentagon);
+            break;
+        case 'Fly to Location with heading, pitch and roll' :
+            flyToHeadingPitchRoll();
+            window.Sandcastle.highlight(flyToHeadingPitchRoll);
+            break;
+        case 'Fly to My Location' :
+            flyToLocation();
+            window.Sandcastle.highlight(flyToLocation);
+            break;
+        case 'Fly to Rectangle' :
+            flyToRectangle();
+            window.Sandcastle.highlight(flyToRectangle);
+            break;
+        case 'View a Rectangle' :
+            viewRectangle();
+            window.Sandcastle.highlight(viewRectangle);
+            break;
+        case 'Set camera reference frame' :
+            setReferenceFrame();
+            window.Sandcastle.highlight(setReferenceFrame);
+            break;
+        case 'Set camera with heading, pitch, and roll' :
+            setHeadingPitchRoll();
+            window.Sandcastle.highlight(setHeadingPitchRoll);
+            break;
+        case 'View in ICRF' :
+            viewInICRF();
+            window.Sandcastle.highlight(viewInICRF);
+            break;
+        case 'Move events' :
+            cameraEvents();
+            window.Sandcastle.highlight(cameraEvents);
+            break;
+        default: 
+            console.log('no option');
+    }
+
+});
+
+window.Sandcastle.reset = function() {
     viewer.entities.removeAll();
     scene.primitives.removeAll();
     scene.tweens.removeAll();
@@ -267,7 +320,9 @@ Sandcastle.reset = function() {
 };
 
 scene.morphComplete.addEventListener(function() {
-    Sandcastle.reset();
+    window.Sandcastle.reset();
 });
 
-}());
+});
+
+}(jQuery));
