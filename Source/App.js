@@ -18,10 +18,14 @@ function setCity() {
         var gmaps_url = "http://maps.google.com/maps/api/geocode/json?address=" + address + "&sensor=false";
 
         $.get(gmaps_url, function(data){
-            
+
             var longitude = data.results[0].geometry.location.lng;
             var latitude = data.results[0].geometry.location.lat;
-            window.Sandcastle.declare(setCoordinates);
+
+            //console.log(longitude + ' is long and ' + latitude + ' is latitude');
+
+            window.Sandcastle.declare(setCity);
+
             viewer.camera.flyTo({
                 destination : Cesium.Cartesian3.fromDegrees(longitude, latitude, 15000.0)
             });
