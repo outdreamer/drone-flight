@@ -6,13 +6,46 @@
     var scene = viewer.scene;
     var clock = viewer.clock;
 
-   $('.top-left').hide();
+    $('.top-left').hide();
 
+    function distance(lat1, lon1, lat2, lon2, unit) {
+
+        var radlat1 = Math.PI * lat1/180
+        var radlat2 = Math.PI * lat2/180
+        var theta = lon1-lon2
+        var radtheta = Math.PI * theta/180
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        dist = Math.acos(dist)
+        dist = dist * 180/Math.PI
+        dist = dist * 60 * 1.1515
+        if (unit=="K") { dist = dist * 1.609344 }
+        if (unit=="N") { dist = dist * 0.8684 }
+        return dist
+
+    }
 
     function calcDistance(lat, lng) {
 
-        //
+        var airport_data = "https://gist.githubusercontent.com/tdreyno/4278655/raw/7b0762c09b519f40397e4c3e100b097d861f5588/airports.json";
 
+        $.getJSON(airport_data, function( data ) {
+
+          $.each( data, function( key, val ) {
+            var latitude = data[key].lat;
+            var longitude = data[key].lon;
+            console.log('lat: ' + data[key].lat + ' lon: ' + data[key].lon);
+            var pointDistance = distance(lat, lng, latitude, longitude, 'K');
+            console.log('pointDistance ' + pointDistance);
+
+            if (pointDistance < 5) {
+                return false;
+            }
+
+          });
+
+        });
+
+        return true;
 
     }
 
@@ -22,7 +55,7 @@
 
         /* function to check distance from no-fly zones and display notification if too near */
 
-        var nearNoFly = true; //calcDistance(lat, lng);
+        var nearNoFly = calcDistance(lat, lng);
 
         if (nearNoFly) {
 
@@ -83,8 +116,6 @@
 
             if (ad === false) {
 
-                console.log('scene');
-                console.log(viewer.scene);
                 var scene = viewer.scene;
                 if (scene && (scene.tweens.length > 0)) {
                  scene.tweens.removeAll();
