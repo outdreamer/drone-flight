@@ -8,6 +8,24 @@
     var scene = viewer.scene;
     var clock = viewer.clock;
 
+    function getCoordinates(x, y, z){
+
+        //Create a Cartesian and determine it's Cartographic representation on a WGS84 ellipsoid.
+
+        var position = new Cesium.Cartesian3(x,y,z);
+        var cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
+        var pi = 3.14159265359;
+        var latitude = cartographicPosition.latitude * (180/pi);
+        var longitude = cartographicPosition.longitude * (180/pi);
+        console.log('https://www.google.com/maps/@' + latitude + ',' + longitude + ',8z');
+
+        var coordinates = {};
+        coordinates.latitude = latitude;
+        coordinates.longitude = longitude;
+
+        return coordinates;
+
+    }
 
     function distance(lat1, lon1, lat2, lon2, unit) {
 
@@ -25,97 +43,68 @@
 
     }
 
-    function calcDistance(lat, lng) {
+    function nearNoFly(lat, lng) {
 
         var airport_data = "https://gist.githubusercontent.com/tdreyno/4278655/raw/7b0762c09b519f40397e4c3e100b097d861f5588/airports.json";
 
-        $.getJSON(airport_data, function( data ) {
+        var nofly = false;
 
-          $.each( data, function( key, val ) {
-            var latitude = data[key].lat;
-            var longitude = data[key].lon;
-            console.log('lat: ' + data[key].lat + ' lon: ' + data[key].lon);
-            var pointDistance = distance(lat, lng, latitude, longitude, 'K');
-            console.log('pointDistance ' + pointDistance);
+        $.ajax({
+          url: airport_data,
+          dataType: 'json',
+          async: false,
+          success: function(data) {
 
-            if (pointDistance < 5) {
-                return false;
-            }
+              $.each( data, function( key, val ) {
 
-          });
+                var latitude = data[key].lat;
+                var longitude = data[key].lon;
+
+                var pointDistance = distance(lat, lng, latitude, longitude, 'K');
+
+                if (pointDistance < 20) {
+
+                    console.log('pointDistance less than 10k: ' + pointDistance);
+                    if(!$('.top-left').hasClass('visible')){
+                        $('.top-left').fadeIn('slow', function (){
+                            setTimeout(function() {
+                                $('.top-left').fadeOut();
+                            }, 3000);
+                        });
+                        $('.top-left').addClass('visible');
+                    }
+                    nofly = true;
+                    return false;
+                }
+
+              });
+            console.log('b ' + nofly);
+          }
 
         });
 
-        return true;
+        console.log('returning window nofly: ' + nofly);
 
-    }
-
-    function acceptableDistance (lat, lng) {
-
-        console.log('lat: ' + lat + ' lng: ' + lng);
-
-        /* function to check distance from no-fly zones and display notification if too near */
-
-        var nearNoFly = calcDistance(lat, lng);
-
-        if (nearNoFly) {
-
-            if(!$('.top-left').hasClass('visible')){
-
-                $('.top-left').fadeIn('slow', function (){
-                    setTimeout(function() {
-                        $('.top-left').fadeOut();
-                    }, 3000);
-                });
-
-                $('.top-left').addClass('visible');
-
-            }
-
-            return false;
-
-        } else {
-
-            //$('.top-left').removeClass('visible');
-
-            return true;
-
-        }
-
-    }
-
-    function getCoordinates(x, y, z){
-
-        //Create a Cartesian and determine it's Cartographic representation on a WGS84 ellipsoid.
-        var position = new Cesium.Cartesian3(x,y,z);
-        var cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
-        var pi = 3.14159265359;
-        var latitude = cartographicPosition.latitude * (180/pi);
-        var longitude = cartographicPosition.longitude * (180/pi);
-        console.log('https://www.google.com/maps/@' + latitude + ',' + longitude + ',8z');
-
-        var coordinates = {};
-        coordinates.latitude = latitude;
-        coordinates.longitude = longitude;
-
-        return coordinates;
+        return nofly;
 
     }
 
     viewer.camera.moveStart.addEventListener(function(e) {
             
         /* jj viewChanged.style.display = 'block'; */
+
         console.log('Start');
 
         var startingCoordinates = getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
 
         window.intervalTimer = setInterval(function() {
 
-            console.log('moving');
             var newCoordinates = getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
-            var ad = acceptableDistance(newCoordinates.latitude, newCoordinates.longitude);
+            var ad = nearNoFly(newCoordinates.latitude, newCoordinates.longitude);
+            
+            console.log('stop move? ' + ad);
 
-            if (ad === false) {
+            if (ad === true) {
 
                 var scene = viewer.scene;
                 if (scene && (scene.tweens.length > 0)) {
@@ -132,22 +121,19 @@
     viewer.camera.moveEnd.addEventListener(function() {
 
         viewChanged.style.display = 'none';
+
         if(window.intervalTimer){
             clearInterval(intervalTimer);
         }
+
         console.log('End');
-        var endCoordinates = getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
-        var ad = acceptableDistance(endCoordinates.latitude, endCoordinates.longitude);
 
-        if (ad === false) {
-
-            return;
-
-        }
+        $('.top-left').removeClass('visible');
 
     });
 
     $('.cesium-geocoder-searchButton').on('click', function(){
+
         //var input_val = $('#cesiumContainer .cesium-viewer-geocoderContainer').find('input[type="Search"]').val();
         //if(input_val != 'Enter an address or landmark...') {
             $('#drone-land').addClass('load');
