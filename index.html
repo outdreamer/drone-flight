@@ -7,8 +7,14 @@
     <meta name="description" content="Fly to a specified location or view a geographic rectangle.">
     <meta name="cesium-sandcastle-labels" content="Showcases">
     <title>Cesium Demo</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script type="text/javascript" src="/Source/require.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>    
+    <script type="text/javascript" src="https://getbootstrap.com/2.3.2/assets/js/bootstrap-alert.js"></script>
+    <script type="text/javascript" src="Source/bootstrap-notify.js"></script>
+    <script type="text/javascript" src="Source/require.js"></script>
+    <link href="Source/bootstrap-notify.css" rel="stylesheet">
+    <link href="Source/alert-blackgloss.css" rel="stylesheet">
     <script type="text/javascript">
     require.config({
         baseUrl : '/Source',
@@ -52,16 +58,57 @@
         #drone-land.load {
             opacity: 1;
         }
+        #no-drone-zone {
+          display: block;
+          position: relative;
+        }
+        #no-drone-zone #message {
+          display: block;
+          float: right;
+          width: 40%;
+        }
+        #no-drone-zone img {
+          width: 110px;
+          height: 120px;
+          display: inline;
+          padding: 0;
+        }
+        #no-drone-zone .close {
+          opacity: 1;
+          z-index: 10000000;
+        }
+        #notifications {
+          padding: 10px 20px;
+          width: 33%;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+        #container {
+          position: relative;
+          width: 100%;
+          height: 100%;
+        }
+        #toolbar {
+          display: none;
+        }
     </style>
 
 </head>
 <body>
-  <div id="notifications" class="notify">
+<div id="container">
+  <div id="notifications" class="alert-blackgloss notifications top-left">
+    <div id="no-drone-zone"><img src="Source/no_drone_zone.png"></img>
+      <div id="message">You are approaching a no-fly zone: divert your course.</div>
+      <div id="close" class="close"></div>
+    </div>
   </div>
   <div id="cesiumContainer" class="fullSize"></div>
   <div id="loadingOverlay"><h1>Loading...</h1></div>
   <div id="toolbar"><div id="viewChanged">View Changed</div></div>
   <div id="drone-land"><img src="Source/drone_blue.png"></div>
+  <div id="no-drone-zone"><img src="Source/no_drone_zone.png"></div>
+</div>
   <footer>
     <script type="text/javascript" src="/Source/Sandcastle-header.js"></script>
     <script src="ThirdParty/Cesium/Cesium.js"></script>

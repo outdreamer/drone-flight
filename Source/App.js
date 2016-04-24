@@ -6,6 +6,50 @@
     var scene = viewer.scene;
     var clock = viewer.clock;
 
+   $('.top-left').hide();
+
+
+    function calcDistance(lat, lng) {
+
+        //
+
+
+    }
+
+    function acceptableDistance (lat, lng) {
+
+        console.log('lat: ' + lat + ' lng: ' + lng);
+
+        /* function to check distance from no-fly zones and display notification if too near */
+
+        var nearNoFly = true; //calcDistance(lat, lng);
+
+        if (nearNoFly) {
+
+            if(!$('.top-left').hasClass('visible')){
+
+                $('.top-left').fadeIn('slow', function (){
+                    setTimeout(function() {
+                        $('.top-left').fadeOut();
+                    }, 3000);
+                });
+
+                $('.top-left').addClass('visible');
+
+            }
+
+            return false;
+
+        } else {
+
+            //$('.top-left').removeClass('visible');
+
+            return true;
+
+        }
+
+    }
+
     function getCoordinates(x, y, z){
 
         //Create a Cartesian and determine it's Cartographic representation on a WGS84 ellipsoid.
@@ -16,16 +60,39 @@
         var longitude = cartographicPosition.longitude * (180/pi);
         console.log('https://www.google.com/maps/@' + latitude + ',' + longitude + ',8z');
 
+        var coordinates = {};
+        coordinates.latitude = latitude;
+        coordinates.longitude = longitude;
+
+        return coordinates;
+
     }
 
-    viewer.camera.moveStart.addEventListener(function() {
+    viewer.camera.moveStart.addEventListener(function(e) {
             
-        viewChanged.style.display = 'block';
+        /* jj viewChanged.style.display = 'block'; */
         console.log('Start');
-        getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
+
+        var startingCoordinates = getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
+
         window.intervalTimer = setInterval(function() {
+
             console.log('moving');
-            getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
+            var newCoordinates = getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
+            var ad = acceptableDistance(newCoordinates.latitude, newCoordinates.longitude);
+
+            if (ad === false) {
+
+                console.log('scene');
+                console.log(viewer.scene);
+                var scene = viewer.scene;
+                if (scene && (scene.tweens.length > 0)) {
+                 scene.tweens.removeAll();
+                }
+                return;
+
+            }
+
         }, 1000);
 
     });
@@ -37,7 +104,14 @@
             clearInterval(intervalTimer);
         }
         console.log('End');
-        getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
+        var endCoordinates = getCoordinates(viewer.camera.position.x, viewer.camera.position.y, viewer.camera.position.z);
+        var ad = acceptableDistance(endCoordinates.latitude, endCoordinates.longitude);
+
+        if (ad === false) {
+
+            return;
+
+        }
 
     });
 
