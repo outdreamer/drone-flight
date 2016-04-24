@@ -4,13 +4,32 @@
 </a>
 </p>
 
-Drone Flight lets you simulate flights based on a user-defined city or coordinate pair.
+Drone Flight is a prototyping tool built with Cesium that helps you prototype flight simulations based on a user-defined city or coordinate pair.
 
 It's based on Cesium, which provides the map, along with a Cesium Starter App provided here:
 
 https://github.com/pjcozzi/cesium-starter-app
 
-I've defined two custom events so far: Set City and Set Coordinates.
+I've defined two custom events: 
+
+	- Set City, which takes input of a street address & city.
+	- Set Coordinates, which takes input of latitude & longitude coordinates.
+
+To define your own custom events:
+
+	- index.html:
+		Uncomment the #toolbar display property in index.html and position the toolbar according to your needs.
+
+	- App.js:
+		- define your custom function in App.js (see function example: setCity() )
+		- add an entry in the call to window.Sandcastle.addToolbarMenu() to set your new menu item for the dropdown
+		- add an entry in the $('select.sandcastle-button').change() event function
+
+	- For ideas on custom events, see the Camera workshop here:
+		https://cesiumjs.org/Cesium/Apps/Sandcastle/index.html?src=Camera.html&label=Showcases
+
+To use the existing prototype:
+	- Click the search icon and enter an address, or if you've displayed the #toolbar div, select an action defined in App.js
 
 Local server
 ------------
@@ -19,7 +38,7 @@ A local HTTP server is required to run the app.
 
 * Install [node.js](http://nodejs.org/)
 * From the `cesium-starter-app` root directory, run
-   * `npm install`
+   * `npm install` (This step is only necessary if node_modules is not included)
    * `node server.js`
 
 Browse to `http://localhost:8000/`

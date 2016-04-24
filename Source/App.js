@@ -65,6 +65,7 @@
                 if (pointDistance < 20) {
 
                     console.log('pointDistance less than 10k: ' + pointDistance);
+
                     if(!$('.top-left').hasClass('visible')){
                         $('.top-left').fadeIn('slow', function (){
                             setTimeout(function() {
@@ -78,6 +79,7 @@
                 }
 
               });
+              
             console.log('b ' + nofly);
           }
 
