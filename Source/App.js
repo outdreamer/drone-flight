@@ -69,7 +69,7 @@
                         $('.top-left').fadeIn('slow', function (){
                             setTimeout(function() {
                                 $('.top-left').fadeOut();
-                            }, 3000);
+                            }, 30000);
                         });
                         $('.top-left').addClass('visible');
                     }
