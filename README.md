@@ -24,6 +24,7 @@ To define your own custom events:
 		- define your custom function in App.js (see function example: setCity() )
 		- add an entry in the call to window.Sandcastle.addToolbarMenu() to set your new menu item for the dropdown
 		- add an entry in the $('select.sandcastle-button').change() event function
+		- modify the airport_data parameter and object navigation to fetch different data than the airport data
 
 	- For ideas on custom events, see the Camera workshop here:
 		https://cesiumjs.org/Cesium/Apps/Sandcastle/index.html?src=Camera.html&label=Showcases

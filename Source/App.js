@@ -79,8 +79,7 @@
                 }
 
               });
-              
-            console.log('b ' + nofly);
+
           }
 
         });
