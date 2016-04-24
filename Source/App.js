@@ -1,12 +1,13 @@
 (function($) {
 
+  $('.top-left').hide();
+
   $(document).on('ready', function(){
 
     var viewer = new Cesium.Viewer('cesiumContainer');
     var scene = viewer.scene;
     var clock = viewer.clock;
 
-    $('.top-left').hide();
 
     function distance(lat1, lon1, lat2, lon2, unit) {
 
