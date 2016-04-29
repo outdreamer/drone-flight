@@ -10,27 +10,35 @@ It's based on Cesium, which provides the map, along with a Cesium Starter App pr
 
 https://github.com/pjcozzi/cesium-starter-app
 
-I've defined two custom events: 
+I've defined a few custom events:
 
 	- Set City, which takes input of a street address & city.
 	- Set Coordinates, which takes input of latitude & longitude coordinates.
+	- Define My Own Flight, which asks for the starting location, zooms to that point, then asks for the ending location & executes the flight to that end point.
 
 To define your own custom events:
 
 	- index.html:
-		Uncomment the #toolbar display property in index.html and position the toolbar according to your needs.
+
+		Uncomment the #toolbar display property in index.html if not already uncommented.
 
 	- App.js:
+
 		- define your custom function in App.js (see function example: setCity() )
 		- add an entry in the call to window.Sandcastle.addToolbarMenu() to set your new menu item for the dropdown
 		- add an entry in the $('select.sandcastle-button').change() event function
-		- modify the airport_data parameter and object navigation to fetch different data than the airport data
+		- modify the airport_data parameter and object navigation to fetch the data you need, if different from the airport data
 
 	- For ideas on custom events, see the Camera workshop here:
 		https://cesiumjs.org/Cesium/Apps/Sandcastle/index.html?src=Camera.html&label=Showcases
 
-To use the existing prototype:
-	- Click the search icon and enter an address, or if you've displayed the #toolbar div, select an action defined in App.js
+To use the existing Camera (defined by Cesium):
+
+	- Click the search icon and enter an address
+
+To use the Camera Events I defined:
+
+	- Select an action in the Camera Options dropdown in the bottom right corner (defined in App.js)
 
 Local server
 ------------
@@ -38,6 +46,7 @@ Local server
 A local HTTP server is required to run the app.
 
 * Install [node.js](http://nodejs.org/)
+* I've included the node_modules to avoid unpublish issues with Node contributions, so you won't need to run npm install for now, and it's safe to skip to running `node server.js`
 * From the `cesium-starter-app` root directory, run
    * `npm install` (This step is only necessary if node_modules is not included)
    * `node server.js`
